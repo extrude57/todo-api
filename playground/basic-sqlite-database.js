@@ -33,10 +33,19 @@ sequelize.sync({
             // console.log('Finished Here');
             // console.log(todo);
         }).then(function(){
-            return Todo.findByPk(1);
-        }).then(function(todo){
-            if (todo){
-                console.log(todo.toJSON());
+            return Todo.findAll({
+                where:{
+                    description:{
+                        $like: '%trash%'
+                    }
+                }
+            })
+        }).then(function(todos){
+            if (todos){
+                todos.forEach(function(todo){
+                    console.log(todo.toJSON());
+                });
+                // console.log(todo.toJSON());
             }else{
                 console.log('No todo found!');
             }
