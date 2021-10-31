@@ -22,7 +22,7 @@ var todos = [{
     completed: true
 }];
 
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 app.get('/', function(req,res){
     res.send('Todo API Root');
 });
