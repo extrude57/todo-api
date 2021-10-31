@@ -4,6 +4,8 @@ var app = express();
 var PORT = process.env.PORT || 5045;
 var todoNextId = 1;
  
+var  _ = require('underscore');
+
 var todos = [{
     id:1,
     description:'Meet dead pigs at lunch',
@@ -31,12 +33,15 @@ app.get('/todos',function(req,res){
 
 app.get('/todos/:id', function (req,res){
     var todoId = parseInt(req.params.id,10); 
-    var matchedTodo;
-    todos.forEach(function (todo){
-        if (todoId === todo.id){
-            matchedTodo = todo; 
-        }
-    });
+    // var matchedTodo;
+    // todos.forEach(function (todo){
+    //     if (todoId === todo.id){
+    //         matchedTodo = todo; 
+    //     }
+    // });
+
+    var matchedTodo = _.findWhere(todos, {id:todoId});
+
     if (matchedTodo){
         res.json(matchedTodo);
     }else{
@@ -48,6 +53,9 @@ app.get('/todos/:id', function (req,res){
 // POST / todos
 app.post('/todos',function(req,res){
     var body = req.body;
+    if(!_.isBoolean(body.completed) || !_.isString(body.description) || body.description.trim().length === 0){
+        return res.status(400).send();
+    }
 
     body.id = todoNextId++;
     todos.push(body);
