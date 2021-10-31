@@ -9,17 +9,21 @@ var  _ = require('underscore');
 
 // var todos = [];
 var todos = [{
-    id:1,
+
     description:'Meet dead pigs at lunch',
-    completed: false
+    completed: false,
+    id:1
 }, {
-    id:2, 
+ 
     description: 'Go to market',
-    completed: false
+    completed: false,
+    id:2
+
 }, {
-    id:3,
+    
     description: 'He told youhe made you mad',
-    completed: true
+    completed: true,
+    id:3
 }];
 
 app.use(bodyParser.json());
@@ -39,6 +43,13 @@ app.get('/todos',function(req,res){
     }else if (queryParams.hasOwnProperty('completed') && queryParams.completed === 'false'){
         filteredTodos = _.where(filteredTodos, {completed:false});
     }
+    
+    if(queryParams.hasOwnProperty('q') && queryParams.q.length > 0 ) {
+        filteredTodos = _.filter(filteredTodos,function(todo){
+            return todo.description.indexOf(queryParams.q) > -1;
+        })
+    }
+    // "Go to work on Staurday".indexOf('work');
     res.json(filteredTodos);
     // debugger;
 
