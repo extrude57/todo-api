@@ -6,6 +6,8 @@ var todoNextId = 1;
  
 var  _ = require('underscore');
 
+
+// var todos = [];
 var todos = [{
     id:1,
     description:'Meet dead pigs at lunch',
@@ -20,7 +22,7 @@ var todos = [{
     completed: true
 }];
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 app.get('/', function(req,res){
     res.send('Todo API Root');
 });
@@ -28,7 +30,18 @@ app.get('/', function(req,res){
 //GET req /todos
 
 app.get('/todos',function(req,res){
-    res.json(todos);
+    var queryParams = req.query;
+    var filteredTodos = todos;
+
+    if (queryParams.hasOwnProperty('completed') && queryParams.completed === 'true'){
+        filteredTodos = _.where(filteredTodos, {completed:true});
+
+    }else if (queryParams.hasOwnProperty('completed') && queryParams.completed === 'false'){
+        filteredTodos = _.where(filteredTodos, {completed:false});
+    }
+    res.json(filteredTodos);
+    // debugger;
+
 });
 
 app.get('/todos/:id', function (req,res){
