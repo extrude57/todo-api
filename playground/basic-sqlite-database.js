@@ -24,11 +24,22 @@ sequelize.sync({
         }).then(function () {
     console.log('Everything is sycned');
         Todo.create({
-            description:'Walk my dog',
+            description:'Take out trash',
             completed:false
         }).then(function(todo){
-            console.log('Finished Here');
-            console.log(todo);
+            return Todo.create({
+                description:'Clean office'
+            });
+            // console.log('Finished Here');
+            // console.log(todo);
+        }).then(function(){
+            return Todo.findByPk(1);
+        }).then(function(todo){
+            if (todo){
+                console.log(todo.toJSON());
+            }else{
+                console.log('No todo found!');
+            }
         }).catch(function(e){
             console.log(e);
         });
